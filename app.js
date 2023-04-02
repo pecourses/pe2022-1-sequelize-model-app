@@ -17,5 +17,5 @@ module.exports = app;
 // GET /api/users
 // POST /api/users
 // GET /api/users/1
-// UPDATE /api/users/1
+// PATCH /api/users/1
 // DELETE /api/users/1
