@@ -1,0 +1,13 @@
+{
+  "name": "sequelize-model-app",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "start-dev": "nodemon ."
+  },
+  "author": "",
+  "license": "ISC"
+}
