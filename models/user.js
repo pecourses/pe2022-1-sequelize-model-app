@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { hashSync } = require('bcrypt');
 const { GENDERS } = require('../constants');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -30,9 +31,19 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         validate: { isEmail: true },
       },
+      // 123456 -> dfg45fdg45454g5dg54s5df4gs54f5154vojeifdif
+      // User.create({passwordHash:'123456'})
+      // ->
+      // validarots,setters
+      // ->
+      // INSERT INTO users(password_hash)
+      // VALUES ('dfg45fdg45454g5dg54s5df4gs54f5154vojeifdif')
       passwordHash: {
         allowNull: false,
         type: DataTypes.STRING,
+        set (value) {
+          this.setDataValue('passwordHash', hashSync(value, 10));
+        },
       },
       birthday: {
         type: DataTypes.DATEONLY,
