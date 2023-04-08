@@ -3,14 +3,16 @@ const usersRouter = Router();
 const { usersController } = require('./../controllers');
 
 // POST /api/users body
-// GET /api/users?limit=10&offset=0
+// GET /api/users?limit=10&offset=0 (query)
 
+// GET /api/users/1 (params)
+//  /api/users/:userId
 usersRouter
   .route('/')
   .post(usersController.createUser)
   .get(usersController.getUsers);
 usersRouter
-  .route('/userId')
+  .route('/:userId')
   .get(usersController.getUserById)
   .patch(usersController.updateUserById)
   .delete(usersController.deleteUserById);

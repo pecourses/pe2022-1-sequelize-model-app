@@ -21,10 +21,15 @@ module.exports.createUser = async (req, res, next) => {
 };
 
 module.exports.getUsers = async (req, res, next) => {
+  const { limit = 10, offset = 0 } = req.query;
+
   try {
     const foundUsers = await User.findAll({
       raw: true,
       attributes: { exclude: ['passwordHash', 'createdAt', 'updatedAt'] },
+      limit,
+      offset,
+      order: ['id'],
     });
     res.status(200).send(foundUsers);
   } catch (e) {
@@ -32,7 +37,10 @@ module.exports.getUsers = async (req, res, next) => {
   }
 };
 
-module.exports.getUserById = async (req, res, next) => {};
+module.exports.getUserById = async (req, res, next) => {
+  // TODO GET /api/users/1 handler
+  // findAll, findOne, findByPk
+};
 
 module.exports.updateUserById = async (req, res, next) => {};
 
