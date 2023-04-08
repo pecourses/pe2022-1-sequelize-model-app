@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const createError = require('http-errors');
 const { User } = require('./../models');
 
 module.exports.createUser = async (req, res, next) => {
@@ -47,7 +48,7 @@ module.exports.getUserById = async (req, res, next) => {
       // where: { id: userId },
     });
     if (!foundUser) {
-      return res.status(404).send('User Not Found');
+      return next(createError(404, 'User Not Found'));
     }
     res.status(200).send({ data: foundUser });
   } catch (e) {
@@ -69,7 +70,7 @@ module.exports.updateUserById = async (req, res, next) => {
     });
 
     if (!updatedUser) {
-      return res.status(404).send('User Not Found');
+      return next(createError(404, 'User Not Found'));
     }
 
     const preparedUser = _.omit(updatedUser, [
@@ -121,7 +122,7 @@ module.exports.deleteUserById = async (req, res, next) => {
     const deletedUsersCount = await User.destroy({ where: { id: userId } });
 
     if (!deletedUsersCount) {
-      return res.status(404).send('User Not Found');
+      return next(createError(404, 'User Not Found'));
     }
 
     res.status(204).end();
