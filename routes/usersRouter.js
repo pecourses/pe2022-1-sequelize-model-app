@@ -8,6 +8,7 @@ const { usersController } = require('./../controllers');
 // GET /api/users/1 (params)
 //  /api/users/:userId
 // PATCH /api/users/1 body (params)
+// PUT /api/users/1 body (params)
 // DELETE /api/users/1 (params)
 usersRouter
   .route('/')
@@ -17,6 +18,7 @@ usersRouter
   .route('/:userId')
   .get(usersController.getUserById)
   .patch(usersController.updateUserById)
+  .put(usersController.updateOrCreateUserById, usersController.createUser)
   .delete(usersController.deleteUserById);
 
 module.exports = usersRouter;
