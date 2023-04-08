@@ -47,7 +47,7 @@ module.exports.getUserById = async (req, res, next) => {
       // where: { id: userId },
     });
     if (!foundUser) {
-      res.status(404).send('User Not Found');
+      return res.status(404).send('User Not Found');
     }
     res.status(200).send(foundUser);
   } catch (e) {
@@ -58,6 +58,17 @@ module.exports.getUserById = async (req, res, next) => {
 module.exports.updateUserById = async (req, res, next) => {};
 
 module.exports.deleteUserById = async (req, res, next) => {
-  // TODO DELETE /api/users/1 handler
-  // destroy
+  const { userId } = req.params;
+
+  try {
+    const deletedUsersCount = await User.destroy({ where: { id: userId } });
+
+    if (!deletedUsersCount) {
+      return res.status(404).send('User Not Found');
+    }
+
+    res.status(204).end();
+  } catch (e) {
+    next(e);
+  }
 };

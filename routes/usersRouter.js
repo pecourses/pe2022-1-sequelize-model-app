@@ -7,6 +7,8 @@ const { usersController } = require('./../controllers');
 
 // GET /api/users/1 (params)
 //  /api/users/:userId
+
+// DELETE /api/users/1 (params)
 usersRouter
   .route('/')
   .post(usersController.createUser)
