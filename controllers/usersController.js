@@ -20,7 +20,17 @@ module.exports.createUser = async (req, res, next) => {
   }
 };
 
-module.exports.getUsers = async (req, res, next) => {};
+module.exports.getUsers = async (req, res, next) => {
+  try {
+    const foundUsers = await User.findAll({
+      raw: true,
+      attributes: { exclude: ['passwordHash', 'createdAt', 'updatedAt'] },
+    });
+    res.status(200).send(foundUsers);
+  } catch (e) {
+    next(e);
+  }
+};
 
 module.exports.getUserById = async (req, res, next) => {};
 
