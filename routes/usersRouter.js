@@ -7,7 +7,7 @@ const { usersController } = require('./../controllers');
 
 // GET /api/users/1 (params)
 //  /api/users/:userId
-
+// PATCH /api/users/1 body (params)
 // DELETE /api/users/1 (params)
 usersRouter
   .route('/')

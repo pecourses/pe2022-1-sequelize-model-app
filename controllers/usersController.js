@@ -55,7 +55,34 @@ module.exports.getUserById = async (req, res, next) => {
   }
 };
 
-module.exports.updateUserById = async (req, res, next) => {};
+module.exports.updateUserById = async (req, res, next) => {
+  const {
+    body,
+    params: { userId },
+  } = req;
+
+  try {
+    const [, [updatedUser]] = await User.update(body, {
+      raw: true,
+      where: { id: userId },
+      returning: true,
+    });
+
+    if (!updatedUser) {
+      return res.status(404).send('User Not Found');
+    }
+
+    const preparedUser = _.omit(updatedUser, [
+      'passwordHash',
+      'createdAt',
+      'updatedAt',
+    ]);
+
+    res.status(200).send(preparedUser);
+  } catch (e) {
+    next(e);
+  }
+};
 
 module.exports.deleteUserById = async (req, res, next) => {
   const { userId } = req.params;
