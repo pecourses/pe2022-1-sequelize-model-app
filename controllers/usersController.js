@@ -130,3 +130,28 @@ module.exports.deleteUserById = async (req, res, next) => {
     next(e);
   }
 };
+
+module.exports.getUserTasks = async (req, res, next) => {
+  // первірити, чи користувач існує
+  // + отримати його таски
+  // - 404
+
+  const { userId } = req.params;
+
+  try {
+    const foundUser = await User.findByPk(userId);
+
+    if (!foundUser) {
+      return next(createError(404, 'User Not Found'));
+    }
+
+    const foundTasks = await foundUser.getTasks({
+      raw: true,
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+    });
+
+    res.status(200).send({ data: foundTasks });
+  } catch (e) {
+    next(e);
+  }
+};

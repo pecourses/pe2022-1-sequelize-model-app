@@ -14,11 +14,14 @@ usersRouter
   .route('/')
   .post(usersController.createUser)
   .get(usersController.getUsers);
+
 usersRouter
   .route('/:userId')
   .get(usersController.getUserById)
   .patch(usersController.updateUserById)
   .put(usersController.updateOrCreateUserById, usersController.createUser)
   .delete(usersController.deleteUserById);
+
+usersRouter.get('/:userId/tasks', usersController.getUserTasks);
 
 module.exports = usersRouter;
