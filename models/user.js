@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         set (value) {
           this.setDataValue(
             'passwordHash',
-            hashSync(value, process.env.HASH_SALT)
+            hashSync(value, Number(process.env.HASH_SALT))
           );
         },
       },
