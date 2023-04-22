@@ -1,16 +1,23 @@
 const express = require('express');
 const router = require('./routes');
 const { errorHandlers } = require('./middleware');
+const { STATIC_PATH } = require('./constants');
 
 const app = express();
 
-app.use(express.json());
+app.use(express.static(STATIC_PATH));
+
+app.use(express.json({ type: 'multipart/form-data' }));
 
 app.use('/api', router);
 
 app.use(errorHandlers.dbErrorHandler, errorHandlers.errorHandler);
 
 module.exports = app;
+
+// MultipartFormData;
+// file;
+// body;
 
 // GET /api/users
 // POST /api/users
@@ -23,3 +30,5 @@ module.exports = app;
 
 // POST /api/tasks
 // GET /api/tasks
+
+// http://localhost:5000/image1.jpeg
