@@ -1,3 +1,4 @@
+const path = require('path');
 const _ = require('lodash');
 const createError = require('http-errors');
 const { User } = require('./../models');
@@ -153,5 +154,25 @@ module.exports.getUserTasks = async (req, res, next) => {
     res.status(200).send({ data: foundTasks });
   } catch (e) {
     next(e);
+  }
+};
+
+module.exports.changeUserImage = async (req, res, next) => {
+  const {
+    params: { userId },
+    file: { filename },
+  } = req;
+
+  try {
+    const [, [updatedUser]] = await User.update(
+      { image: path.join('images', filename) },
+      { where: { id: userId }, returning: true, raw: true }
+    );
+    if (!updatedUser) {
+      return next(createError(404, 'User Not Found'));
+    }
+    res.status(200).send({ data: updatedUser });
+  } catch (err) {
+    next(err);
   }
 };
