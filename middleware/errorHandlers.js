@@ -1,7 +1,15 @@
 const createError = require('http-errors');
+const multer = require('multer');
 const {
   Sequelize: { BaseError, ValidationError: SequelizeValidationError },
 } = require('./../models');
+
+module.exports.multerErrorHandler = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return next(createError(500, 'Multer Error'));
+  }
+  next(err);
+};
 
 module.exports.dbErrorHandler = (err, req, res, next) => {
   // Відловлюємо помилки Sequelize (https://sequelize.org/api/v6/identifiers.html#errors)
@@ -28,7 +36,7 @@ module.exports.errorHandler = (err, req, res, next) => {
     return;
   }
   const status = err.status ?? 500;
-
+  console.log('err :>> ', err);
   res.status(status).send({
     errors: [
       {
