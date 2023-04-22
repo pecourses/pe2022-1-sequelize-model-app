@@ -5,10 +5,16 @@ const { User } = require('./../models');
 
 module.exports.createUser = async (req, res, next) => {
   // дістати дані з body
-  const { body } = req;
+  const {
+    body,
+    file: { filename },
+  } = req;
   try {
     // спробувати створити нового користувача в БД
-    const createdUser = await User.create(body);
+    const createdUser = await User.create({
+      ...body,
+      image: path.join('images', filename),
+    });
     // ок - відправити 200 + створеного користувача
     const preparedUser = _.omit(createdUser.get(), [
       'passwordHash',
