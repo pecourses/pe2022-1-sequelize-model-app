@@ -7,7 +7,7 @@ const app = express();
 
 app.use(express.static(STATIC_PATH));
 
-app.use(express.json({ type: 'multipart/form-data' }));
+app.use(express.json());
 
 app.use('/api', router);
 

@@ -1,15 +1,9 @@
 const { Router } = require('express');
 const usersRouter = Router();
 const { usersController } = require('./../controllers');
+const { STATIC_PATH } = require('../constants');
+const multer = require('multer');
 
-// POST /api/users body
-// GET /api/users?limit=10&offset=0 (query)
-
-// GET /api/users/1 (params)
-//  /api/users/:userId
-// PATCH /api/users/1 body (params)
-// PUT /api/users/1 body (params)
-// DELETE /api/users/1 (params)
 usersRouter
   .route('/')
   .post(usersController.createUser)
@@ -23,5 +17,13 @@ usersRouter
   .delete(usersController.deleteUserById);
 
 usersRouter.get('/:userId/tasks', usersController.getUserTasks);
+
+// PATCH /api/users/1/images
+const upload = multer({ dest: STATIC_PATH });
+
+usersRouter.patch('/:userId/images', upload.single('userPhoto'));
+// 1 збереже файл в статичній папці
+//   згенерує ім'я файла і прокине далі
+// 2 збереже ім'я файла в БД для користувача userId
 
 module.exports = usersRouter;
