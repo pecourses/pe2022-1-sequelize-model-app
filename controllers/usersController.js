@@ -5,16 +5,13 @@ const { User } = require('./../models');
 
 module.exports.createUser = async (req, res, next) => {
   // дістати дані з body
-  const {
-    body,
-    file: { filename },
-  } = req;
+  const { body, file } = req;
   try {
     // спробувати створити нового користувача в БД
-    const createdUser = await User.create({
-      ...body,
-      image: path.join('images', filename),
-    });
+    if (file) {
+      body.image = path.join('images', file.filename);
+    }
+    const createdUser = await User.create(body);
     // ок - відправити 200 + створеного користувача
     const preparedUser = _.omit(createdUser.get(), [
       'passwordHash',
@@ -166,12 +163,15 @@ module.exports.getUserTasks = async (req, res, next) => {
 module.exports.changeUserImage = async (req, res, next) => {
   const {
     params: { userId },
-    file: { filename },
+    file,
   } = req;
 
   try {
+    if (!file) {
+      return next(createError(422, 'File is required'));
+    }
     const [, [updatedUser]] = await User.update(
-      { image: path.join('images', filename) },
+      { image: path.join('images', file.filename) },
       { where: { id: userId }, returning: true, raw: true }
     );
     if (!updatedUser) {
