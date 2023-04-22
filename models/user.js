@@ -45,7 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
         set (value) {
-          this.setDataValue('passwordHash', hashSync(value, 10));
+          this.setDataValue(
+            'passwordHash',
+            hashSync(value, process.env.HASH_SALT)
+          );
         },
       },
       birthday: {
